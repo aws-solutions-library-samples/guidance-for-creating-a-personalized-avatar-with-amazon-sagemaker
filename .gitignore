@@ -1,0 +1,6 @@
+*.tar.gz
+*.json
+*.yml
+__pycache__/
+.ipynb_checkpoints
+
