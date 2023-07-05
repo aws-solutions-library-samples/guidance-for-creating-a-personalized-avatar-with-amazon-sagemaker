@@ -51,13 +51,15 @@ Additional modules and utilities are provided within subdirectories.
 
 To achieve the best results from fine-tuning Stable Diffusion to generate images of yourself, it is typically need a large quantity and variety of photos of yourself from different angles, with different expressions, and in different backgrounds.
 
-![Sample Pictures]()
+![Input Sample Pictures](statics/input_examples.jpg)
 
 ## Example Outputs
 
 You can try the fine-tuned model by invoking the MME endpoint at the end of the notebook. The input parameters we exposed in our example include prompt, negative_prompt, and gen_args as shown in the code snippet below. You set the data type and shape of each input item in the dictionary and convert them into json string.  Finally, the string payload and TargetModel are passed into request to generate your avatar picture. See the output example below.
 
-![Sample Output Images]()
+Input Images          |  Personalized Output
+:-------------------------:|:-------------------------:
+![Inputs](statics/demo_inputs.jpg)  |  ![DEMO OUPUT](https://...Ocean.png)
 
 ## Security
 
