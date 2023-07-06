@@ -59,7 +59,7 @@ You can try the fine-tuned model by invoking the MME endpoint at the end of the 
 
 Input Images          |  Personalized Output
 :-------------------------:|:-------------------------:
-![Inputs](statics/demo_inputs.jpg)  |  ![DEMO OUPUT](https://...Ocean.png)
+![Inputs](statics/demo_inputs.jpg)  |  ![DEMO OUPUT](statics/avatar.gif)
 
 ## Security
 
