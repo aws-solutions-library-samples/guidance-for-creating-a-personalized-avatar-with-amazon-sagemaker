@@ -10,6 +10,7 @@ versiontag=$2
 baseimage=$3
 regionname=$4
 account=$5
+triton_acc=$6
 
 if [ "$reponame" == "" ] || [ "$versiontag" == "" ]  || [ "$baseimage" == "" ] || [ "$regionname" == "" ] || [ "$account" == "" ]
 then
@@ -33,12 +34,15 @@ then
 fi
 
 # Get the login command from ECR in order to pull down the SageMaker PyTorch image
-aws ecr get-login-password --region $regionname | docker login --username AWS --password-stdin ${account}.dkr.ecr."${regionname}".amazonaws.com
+aws ecr get-login-password --region $regionname | docker login --username AWS --password-stdin ${triton_acc}.dkr.ecr."${regionname}".amazonaws.com
 
 # Build the docker image locally with the image name and then push it to ECR
 # with the full name.
 docker build  -t ${reponame} . --build-arg BASE_IMAGE=${baseimage}
 docker tag ${reponame} ${fullname}
+
+# Get the login command from ECR in order to pull down the SageMaker PyTorch image
+aws ecr get-login-password --region $regionname | docker login --username AWS --password-stdin ${account}.dkr.ecr."${regionname}".amazonaws.com
 
 docker push ${fullname}
 echo "${fullname}"

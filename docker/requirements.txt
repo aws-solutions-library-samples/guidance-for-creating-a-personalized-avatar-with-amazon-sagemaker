@@ -1,0 +1,8 @@
+numpy
+torch
+accelerate
+transformers
+diffusers
+xformers
+peft
+conda-pack

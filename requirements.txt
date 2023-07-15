@@ -1,3 +1,0 @@
-tritonclient[all]
-Pillow==9.4.0
-gradio

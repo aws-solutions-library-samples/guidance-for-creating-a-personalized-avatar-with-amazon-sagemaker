@@ -39,7 +39,3 @@ instance_group [
     kind: KIND_GPU
   }
 ]
-parameters: {
-  key: "EXECUTION_ENV_PATH",
-  value: {string_value: "/tmp/conda/sd_env.tar.gz"}
-}

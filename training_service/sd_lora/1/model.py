@@ -29,10 +29,11 @@ class TritonPythonModel:
     
         device='cuda'
         
-        print("check base model files at /tmp/stable_diff:\n\n")
-        print(os.listdir('/tmp/stable_diff'))
+        print("check base model files at /home/stable_diff:\n\n")
+        print(os.listdir("/home/"))
+        print(os.listdir('/home/stable_diff'))
         
-        self.pipe = StableDiffusionPipeline.from_pretrained('/tmp/stable_diff',
+        self.pipe = StableDiffusionPipeline.from_pretrained('/home/stable_diff',
                                                             torch_dtype=torch.float16,
                                                             revision="fp16").to(device)
 
