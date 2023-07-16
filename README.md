@@ -1,36 +1,70 @@
-## Hyper-Personalized Stable Diffusion using MME
+## Building Personalized Avatar With Generative AI Using Amazon SageMaker
 
-### Stable Diffusion models
-Stable Diffusion is a deep learning, text-to-image model. It is primarily used to generate detailed images conditioned on text descriptions, though it can also be applied to other tasks such as inpainting, outpainting, and generating image-to-image translations guided by a text prompt.
+This repo demonstrate how to use generative AI models like Stable Diffusion (SD) to build a personalized avatar solution on [Amazon SageMaker](https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html) and save inference cost with [Multi Model Endpoints](https://docs.aws.amazon.com/sagemaker/latest/dg/multi-model-endpoints.html) at the same time. You can upload 10-12 images of yourself, then fine-tune a personalized model to generate avatars based on any text prompt. While this example generates personalized avatars, you can apply the technique to any creative art generation. Please share your creations with us after you finish using hashtag #sagemaker #mme on social platforms. We would love to see what you make.
+
+## Solution Architecture
+
+![solution architecture](statics/solution_architecture.png)
+
+The architecture diagram above outlines the end-to-end solution. This sample focuses only on the model training and inference orchestration (green section). Users can reference the full solution architecture and build on top of the example we provide. 
+
+The orchestration can be broken down into four steps:
+
+1. Upload images to S3
+
+2. Fine-tune a Stable Diffusion (SD) 2.1 base model using SageMaker Async Inference
+
+3. Host the fine-tuned models using SageMaker MMEs with GPU.
+
+4. Use the fine-tuned model for inference.
+
+## Usage
+Make sure that your AWS identity has the requisite permissions which includes ability to create SageMaker Resources (Model, EndpointConfigs, Endpoints, and Training Jobs) in addition to S3 access to upload model artifacts. Alternatively, you can attach the [AmazonSageMakerFullAccess](https://docs.aws.amazon.com/sagemaker/latest/dg/security-iam-awsmanpol.html#security-iam-awsmanpol-AmazonSageMakerFullAccess) managed policy to your IAM User or Role.
+
+Clone this repo into a Jupyter environment and run [0_setup_mme_prod_container.ipynb](0_setup_mme_prod_container.ipynb) and [1_personalized_avatar_solution.ipynb](1_personalized_avatar_solution.ipynb) notebooks sequentially. It will take you through the each of the step mentioned above.
+
+This example is tested on `ml.g4dn.2xlarge` using SageMaker Notebook Instance and `conda_pytorch_p310` kernel.
 
 
-### SageMaker Multi-Model Endpoint (MME)
-
-SageMaker MME is a service provided by Amazon SageMaker that allows multiple machine learning models to be hosted on a single endpoint. This means that multiple models can be deployed and managed together, making it easier to scale and maintain machine learning applications. With a multi-model endpoint, different models can be selected based on specific needs, allowing for more flexibility and efficiency. It also enables different types of models to be combined, such as computer vision and natural language processing models, to create more comprehensive applications.
-
-### Sharing Common Components
-![Sharing Model Component](statics/std_diff_mme.jpg)
-
-
-### Run example notebooks
-
-`std_on_mme_byoc.ipynb` will locally build a custom docker image and host triton server for testing. It is recommended to run this example outside of SageMaker Studio
-
-`std_on_mme_server_util.ipynb` uses an utility model with Triton Python Backend to pre-load Conda env and Stable Diffusion base model on to SageMaker MME. The utility model needs to be invoked first, this allows the actual model to read from a common location and significantly reduce the cold start time.
-
-
-### Run the Interactive UI
-
-![Sharing Model Component](statics/gradio_screenshot.jpg)
-
-To run the interactive ui client, you need to first install `requirements.txt`
-
-```
-pip install -r requirements.txt
-```
-Then run the `gradio_sd.py` file like this:
-
-```
-python gradio_sd.py
+## Additional Modules and Utilities
+Additional modules and utilities are provided within subdirectories.
 
 ```
+|-- docker                  Docker to extend Triton container and build a custom image
+|   └── Dockerfile       
+|   └── build_and_push.sh
+|   └── requirements.txt          
+|-- training_service        Training code directory to spin up a fine tuning job in a Deep Jave Library (DJL) container
+|   |--model.py
+|   |--serving.properties
+|   |--requirements.txt
+|   |--trainer.py
+|   |--train_dreambooth.py
+|   |--utils.py
+    └── sd_lora             A Triton Python backend model template directory for LoRA fine-tuned Stable Diffusion models
+        |-- 1
+        |   └── model.py
+        └── config.pbtxt
+```
+
+## Example Inputs
+
+To achieve the best results from fine-tuning Stable Diffusion to generate images of yourself, it is typically need a large quantity and variety of photos of yourself from different angles, with different expressions, and in different backgrounds.
+
+![Input Sample Pictures](statics/input_examples.jpg)
+
+## Example Outputs
+
+You can try the fine-tuned model by invoking the MME endpoint at the end of the notebook. The input parameters we exposed in our example include prompt, negative_prompt, and gen_args as shown in the code snippet below. You set the data type and shape of each input item in the dictionary and convert them into json string.  Finally, the string payload and TargetModel are passed into request to generate your avatar picture. See the output example below.
+
+Input Images          |  Personalized Output
+:-------------------------:|:-------------------------:
+![Inputs](statics/demo_inputs.jpg)  |  ![DEMO OUPUT](statics/avatar.gif)
+
+## Security
+
+See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+
+## License
+
+This library is licensed under the MIT-0 License. See the LICENSE file.
