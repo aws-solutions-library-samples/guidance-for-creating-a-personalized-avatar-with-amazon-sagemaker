@@ -1,29 +1,38 @@
-## Building Personalized Avatar With Generative AI Using Amazon SageMaker
+## Personalized Avatar Workshop With Generative AI On Amazon SageMaker
 
-This repo demonstrate how to use generative AI models like Stable Diffusion (SD) to build a personalized avatar solution on [Amazon SageMaker](https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html) and save inference cost with [Multi Model Endpoints](https://docs.aws.amazon.com/sagemaker/latest/dg/multi-model-endpoints.html) at the same time. You can upload 10-12 images of yourself, then fine-tune a personalized model to generate avatars based on any text prompt. While this example generates personalized avatars, you can apply the technique to any creative art generation. Please share your creations with us after you finish using hashtag #sagemaker #mme on social platforms. We would love to see what you make.
+Welcome to the "Building Personalized Avatar With Generative AI Using Amazon SageMaker" workshop! This workshop aims to demonstrate how to leverage generative AI models, specifically Stable Diffusion (SD), with Amazon SageMaker. You will learn how to fine-tune a personalized model using your own images and generate avatars based on text prompts. The workshop also showcases cost-saving techniques using [Multi Model Endpoints](https://docs.aws.amazon.com/sagemaker/latest/dg/multi-model-endpoints.html).
+
+By the end of this workshop, you will be able to upload your own images, fine-tune a Stable Diffusion model, and generate personalized avatars based on text prompts. You will gain hands-on experience with SageMaker's model training, inference orchestration, and Multi-Model Endpoints. Additionally, you can apply these techniques to other creative art generation projects.
+
+The entire example takes about 1 hour to complete. At the end, you will use your models to build a simple Gradio application which you can experiment with different prompt and generate avatar images of yourself.
+
+Input Images          |  Personalized Output
+:-------------------------:|:-------------------------:
+![Inputs](statics/demo_inputs.jpg)  |  ![DEMO OUPUT](statics/avatar.gif)
+
 
 ## Solution Architecture
 
 ![solution architecture](statics/solution_architecture.png)
 
-The architecture diagram above outlines the end-to-end solution. This sample focuses only on the model training and inference orchestration (green section). Users can reference the full solution architecture and build on top of the example we provide. 
+The architecture diagram above outlines the end-to-end solution. This workshop will only focus on the model training and inference portion of this solution. You can use this as a reference and build on top of the examples we provide. 
 
-The orchestration can be broken down into four steps:
+Steps covered in the workshop:
 
-1. Upload images to S3
-
-2. Fine-tune a Stable Diffusion (SD) 2.1 base model using SageMaker Async Inference
-
-3. Host the fine-tuned models using SageMaker MMEs with GPU.
-
-4. Use the fine-tuned model for inference.
+1. Set Up
+2. Prepare Image Data
+3. Run LoRA Finetuning
+4. Host Multi-Model Endpoints
+5. Invoke Model
+6. Run The Gradio App
+7. Clean Up
 
 ## Usage
 Make sure that your AWS identity has the requisite permissions which includes ability to create SageMaker Resources (Model, EndpointConfigs, Endpoints, and Training Jobs) in addition to S3 access to upload model artifacts. Alternatively, you can attach the [AmazonSageMakerFullAccess](https://docs.aws.amazon.com/sagemaker/latest/dg/security-iam-awsmanpol.html#security-iam-awsmanpol-AmazonSageMakerFullAccess) managed policy to your IAM User or Role.
 
 Clone this repo into a Jupyter environment and run [personalized_avatar_solution.ipynb](personalized_avatar_solution.ipynb) notebook. It will take you through the each of the step mentioned above.
 
-This notebook is tested on **PyTorch 2.0.0 Python 3.10 GPU Optimized kernel on SageMaker Studio. An GPU instance such as ml.g4dn.xlarge is recommended.**
+This notebooks are tested on **Data Science 3.0 kernel in SageMaker Studio with a ml.m5.large instance.**
 
 ## Additional Modules and Utilities
 Additional modules and utilities are provided within subdirectories.
@@ -34,9 +43,8 @@ Additional modules and utilities are provided within subdirectories.
 |       |-- 1
 |       |   └── model.py
 |       └── config.pbtxt
-|-- training_service        Training code directory to spin up a fine tuning job in a Deep Jave Library (DJL) container
-|   |--model.py
-|   |--serving.properties
+|-- src                      Training code directory for the fine tuning job
+|   |--launch.py
 |   |--requirements.txt
 |   |--trainer.py
 |   |--train_dreambooth.py
@@ -52,14 +60,6 @@ Additional modules and utilities are provided within subdirectories.
 To achieve the best results from fine-tuning Stable Diffusion to generate images of yourself, it is typically need a large quantity and variety of photos of yourself from different angles, with different expressions, and in different backgrounds.
 
 ![Input Sample Pictures](statics/input_examples.jpg)
-
-## Example Outputs
-
-You can try the fine-tuned model by invoking the MME endpoint at the end of the notebook. The input parameters we exposed in our example include prompt, negative_prompt, and gen_args as shown in the code snippet below. You set the data type and shape of each input item in the dictionary and convert them into json string.  Finally, the string payload and TargetModel are passed into request to generate your avatar picture. See the output example below.
-
-Input Images          |  Personalized Output
-:-------------------------:|:-------------------------:
-![Inputs](statics/demo_inputs.jpg)  |  ![DEMO OUPUT](statics/avatar.gif)
 
 ## Security
 
