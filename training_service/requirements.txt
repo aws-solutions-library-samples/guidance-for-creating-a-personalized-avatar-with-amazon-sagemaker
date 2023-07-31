@@ -1,6 +1,0 @@
-opencv-python-headless
-peft
-torchvision==0.14.1
-datasets
-autocrop
-boto3

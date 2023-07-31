@@ -26,7 +26,7 @@ def parse_arge():
     
     parser.add_argument("--resolution", 
                         type=int, 
-                        default=512, 
+                        default= 512, 
                         help="Resolution of generated image")
     
     parser.add_argument("--num_steps", 
@@ -143,7 +143,36 @@ def main():
     
     args = parse_arge()
     
-    train_path = preprocess_training_images(args.input_data, args.face_cropping)
+    print("print all arguments for debugging ===================================")
+    
+    print(f"input_data: {args.input_data} and data type: {type(args.input_data)}")
+    print(f"face_cropping: {args.face_cropping} and data type: {type(args.face_cropping)}")
+    print(f"resolution: {args.resolution} and data type: {type(args.resolution)}")
+    print(f"num_steps: {args.num_steps} and data type: {type(args.num_steps)}")
+    print(f"concept_prompt: {args.concept_prompt} and data type: {type(args.concept_prompt)}")
+    print(f"lr: {args.lr} and data type: {type(args.lr)}")
+    print(f"grad_accum: {args.grad_accum} and data type: {type(args.grad_accum)}")
+    print(f"bf16: {args.bf16} and data type: {type(args.bf16)}")
+    print(f"eight_bit_adam: {args.eight_bit_adam} and data type: {type(args.eight_bit_adam)}")
+    print(f"gradient_checkpointing: {args.gradient_checkpointing} and data type: {type(args.gradient_checkpointing)}")
+    print(f"train_text_encoder: {args.train_text_encoder} and data type: {type(args.train_text_encoder)}")
+    print(f"prior_preservation: {args.prior_preservation} and data type: {type(args.prior_preservation)}")
+    print(f"prior_loss_weight: {args.prior_loss_weight} and data type: {type(args.prior_loss_weight)}")
+    print(f"class_prompt: {args.class_prompt} and data type: {type(args.class_prompt)}")
+    print(f"num_class_images: {args.num_class_images} and data type: {type(args.num_class_images)}")
+    print(f"lora_r: {args.lora_r} and data type: {type(args.lora_r)}")
+    print(f"lora_alpha: {args.lora_alpha} and data type: {type(args.lora_alpha)}")
+    print(f"lora_bias: {args.lora_bias} and data type: {type(args.lora_bias)}")
+    print(f"lora_dropout: {args.lora_dropout} and data type: {type(args.lora_dropout)}")
+    print(f"lora_text_encoder_r: {args.lora_text_encoder_r} and data type: {type(args.lora_text_encoder_r)}")
+    print(f"lora_text_encoder_alpha: {args.lora_text_encoder_alpha} and data type: {type(args.lora_text_encoder_alpha)}")
+    print(f"lora_text_encoder_bias: {args.lora_text_encoder_bias} and data type: {type(args.lora_text_encoder_bias)}")
+    print(f"lora_text_encoder_dropout: {args.lora_text_encoder_dropout} and data type: {type(args.lora_text_encoder_dropout)}")
+    
+    
+    print("end of all arguments for debugging ===================================")
+    
+    train_path = preprocess_training_images(args.input_data) #, args.face_cropping)
  
     print("list image files for trianing input: \n\n")
     print(os.listdir(str(train_path)))

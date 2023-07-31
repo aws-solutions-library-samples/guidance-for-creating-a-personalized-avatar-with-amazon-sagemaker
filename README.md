@@ -32,7 +32,7 @@ Make sure that your AWS identity has the requisite permissions which includes ab
 
 Clone this repo into a Jupyter environment and run [personalized_avatar_solution.ipynb](personalized_avatar_solution.ipynb) notebook. It will take you through the each of the step mentioned above.
 
-This notebooks are tested on **Data Science 3.0 kernel in SageMaker Studio with a ml.m5.large instance.**
+We recommend to run this workshop on **Data Science 3.0 kernel in SageMaker Studio with a ml.m5.large instance.**
 
 ## Additional Modules and Utilities
 Additional modules and utilities are provided within subdirectories.
@@ -44,12 +44,12 @@ Additional modules and utilities are provided within subdirectories.
 |       |   └── model.py
 |       └── config.pbtxt
 |-- src                      Training code directory for the fine tuning job
-|   |--launch.py
-|   |--requirements.txt
-|   |--trainer.py
-|   |--train_dreambooth.py
-|   |--utils.py
-    └── sd_lora             A Triton Python backend model template directory for LoRA fine-tuned Stable Diffusion models
+|   |--launch.py             Entry script for the training job
+|   |--requirements.txt      Python modules to extend the container
+|   |--trainer.py            LoRA fine tuning script
+|   |--train_dreambooth.py   Dreambooth script
+|   |--utils.py              Utility functions
+    └── sd_lora              A Triton Python backend model template directory for LoRA fine-tuned Stable Diffusion models
         |-- 1
         |   └── model.py
         └── config.pbtxt
