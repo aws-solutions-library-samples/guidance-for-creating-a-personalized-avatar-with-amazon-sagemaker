@@ -23,7 +23,7 @@ Make sure that your AWS identity has the requisite permissions which includes ab
 
 Clone this repo into a Jupyter environment and run [0_setup_mme_prod_container.ipynb](0_setup_mme_prod_container.ipynb) and [1_personalized_avatar_solution.ipynb](1_personalized_avatar_solution.ipynb) notebooks sequentially. It will take you through the each of the step mentioned above.
 
-This example is tested on `ml.g4dn.2xlarge` using SageMaker Notebook Instance and `conda_pytorch_p310` kernel.
+We recommend to run this solution on **`ml.g4dn.2xlarge` using SageMaker Notebook Instance and `conda_pytorch_p310` kernel.**
 
 
 ## Additional Modules and Utilities
