@@ -1,11 +1,10 @@
 opencv-python-headless
-peft
+peft==0.4.0
 torchvision==0.14.1
-datasets
-autocrop
+datasets==2.14.4
+autocrop==1.3.0
 boto3
-accelerate
-transformers
-diffusers
+accelerate==0.22.0
+diffusers==0.20.1
 xformers
-bitsandbytes
+bitsandbytes==0.41.1
