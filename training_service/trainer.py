@@ -5,9 +5,12 @@ import subprocess
 from typing import Optional, Tuple, Union, List, Dict
 from random import randint
 import os
+from pathlib import Path
 
 # bind to a random port so torch dist doesn't complain when running multiple jobs
 os.environ["MASTER_PORT"] = str(randint(10000, 60000))
+
+
 
 class Trainer:
     def __init__(self, instance_data_dir:Union[pathlib.Path, str], output_dir:Union[pathlib.Path, str]):
@@ -19,30 +22,33 @@ class Trainer:
 
     def run(
         self,
-        base_model: str,
-        resolution: int,
-        n_steps: int,
-        concept_prompt: str,
-        learning_rate: float,
-        gradient_accumulation: int,
-        fp16: bool,
-        use_8bit_adam: bool,
-        gradient_checkpointing: bool,
-        train_text_encoder: bool,
-        with_prior_preservation: bool,
-        prior_loss_weight: float,
-        class_prompt: str,
-        num_class_images: int,
-        class_data_dir: Union[pathlib.Path, str],
-        lora_r: int,
-        lora_alpha: int,
-        lora_bias: str,
-        lora_dropout: float,
-        lora_text_encoder_r: int,
-        lora_text_encoder_alpha: int,
-        lora_text_encoder_bias: str,
-        lora_text_encoder_dropout: float,
+        base_model: str = "stabilityai/stable-diffusion-2-1-base",
+        resolution: int = 512,
+        n_steps: int = 1000,
+        concept_prompt: str = "photo of <<TOK>>",
+        learning_rate: float = 1e-4,
+        gradient_accumulation: int = 1,
+        fp16: bool = True,
+        use_8bit_adam: bool = True,
+        gradient_checkpointing: bool = True,
+        train_text_encoder: bool = True,
+        with_prior_preservation: bool = True,
+        prior_loss_weight: float = 1.0,
+        class_prompt: str = "a photo of person",
+        num_class_images: int = 50,
+        class_data_dir: Union[pathlib.Path, str] = Path("/tmp/priors"),
+        lora_r: int = 128,
+        lora_alpha: int = 1,
+        lora_bias: str = "none",
+        lora_dropout: float = 0.05,
+        lora_text_encoder_r: int = 64,
+        lora_text_encoder_alpha: int = 1,
+        lora_text_encoder_bias: str = "none",
+        lora_text_encoder_dropout: float = 0.05,
     ) -> Tuple[Dict, List[pathlib.Path]]:
+        
+        if not class_data_dir.exists():
+            class_data_dir.mkdir(parents=True)
       
 
         command = f"""

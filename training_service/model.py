@@ -8,6 +8,7 @@ import shutil
 import tarfile
 import uuid
 import subprocess
+import json
 
 is_initialized = False
 s3_bucket = None
@@ -33,8 +34,8 @@ def handle(inputs: Input):
     
     
     tar_buffer = BytesIO(inputs.get_as_bytes())
-    train_path = preprocess_images(tar_buffer)
-    
+    train_path, tuning_config = preprocess_images(tar_buffer)
+
     
     class_data_dir = Path("/tmp/priors")
     if not class_data_dir.exists():
@@ -50,29 +51,8 @@ def handle(inputs: Input):
     
     trn = Trainer(train_path, output_dir)
     
-    status = trn.run(base_model="stabilityai/stable-diffusion-2-1-base",
-        resolution=512,
-        n_steps=1000,
-        concept_prompt="photo of <<TOK>>",
-        learning_rate=1e-4,
-        gradient_accumulation=1,
-        fp16=True,
-        use_8bit_adam=True,
-        gradient_checkpointing=True,
-        train_text_encoder=True,
-        with_prior_preservation=True,
-        prior_loss_weight=1.0,
-        class_prompt="a photo of person",
-        num_class_images=50,
-        class_data_dir=class_data_dir,
-        lora_r=128,
-        lora_alpha=1,
-        lora_bias="none",
-        lora_dropout=0.05,
-        lora_text_encoder_r=64,
-        lora_text_encoder_alpha=1,
-        lora_text_encoder_bias="none",
-        lora_text_encoder_dropout=0.05
+    status = trn.run(
+        **tuning_config
     )
     
     
