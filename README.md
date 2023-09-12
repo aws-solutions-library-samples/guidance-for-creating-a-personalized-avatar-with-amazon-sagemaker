@@ -76,7 +76,7 @@ After successfully cloning the repo, following files and libraries will be downl
 
 After successfully deployed the solution, make sure you have 2 health SageMaker endpoint available: one for fine tuning using SageMaker Asychronous inference and another for hosting the fine tuned models using SageMaker Multi Model Endpoints
 
-You can validate your fine-tuned model by invoking the MME endpoint. Following code is provided later on in the notebook.
+You can also validate your fine-tuned model directly in the notebook by running the following code snippet.
 
 ```
 %%time
@@ -102,7 +102,7 @@ Input Images          |  Personalized Output
 
 ## Next Steps
 
-To further enhance your application, there are several suggested next steps. Firstly, improving the UI experience by focusing on visual appeal, usability, and responsiveness will make the application more engaging and user-friendly. Secondly, incorporating API Gateway and AWS Lambda can provide authentication and access control for your models, ensuring that only authorized users can access the application. Additionally, implementing the AWS Web Application Firewall (WAF) will protect your application from common web exploits, while considering AWS Shield will provide defense against DDoS attacks, safeguarding the availability of your application.
+To further enhance your application, there are several suggested next steps. Firstly, develop and enhance the UI experience, making the application more engaging and user-friendly. Secondly, incorporating API Gateway and AWS Lambda can provide authentication and access control for your models, ensuring that only authorized users can access the application. Additionally, implementing the AWS Web Application Firewall (WAF) will protect your application from common web exploits, while adding AWS Shield will provide defense against DDoS attacks, safeguarding the availability of your application.
 
 ## Cleanup
 
