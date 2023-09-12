@@ -9,11 +9,13 @@ import tarfile
 import uuid
 import subprocess
 import json
+import boto3
 
 is_initialized = False
 s3_bucket = None
 s3_prefix = None
 mme_prefix = None
+s3_client = boto3.client('s3')
 
 def handle(inputs: Input):
     
@@ -61,7 +63,8 @@ def handle(inputs: Input):
     with tarfile.open(output_file_name, mode="w:gz") as tar:
         tar.add(mme_dir, arcname="sd_lora")
     
-    subprocess.run(["/opt/djl/bin/s5cmd", "cp", output_file_name, f"s3://{s3_bucket}/{mme_prefix}/{os.path.basename(output_file_name)}"])
+    s3_client.upload_file(output_file_name, s3_bucket, f"{mme_prefix}/{os.path.basename(output_file_name)}")
+#     subprocess.run(["/opt/djl/bin/s5cmd", "cp", output_file_name, f"s3://{s3_bucket}/{mme_prefix}/{os.path.basename(output_file_name)}"])
         
     # clean up
     shutil.rmtree(train_path.parent, ignore_errors=True)
