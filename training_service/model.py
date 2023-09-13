@@ -10,10 +10,12 @@ import uuid
 import subprocess
 import json
 import time
+from diffusers import DiffusionPipeline
 
 is_initialized = False
 s3_bucket = None
 s3_prefix = None
+model_id = None
 mme_prefix = None
 
 def initialize_service(properties: dict):
@@ -22,11 +24,18 @@ def initialize_service(properties: dict):
     global s3_bucket
     global s3_prefix
     global mme_prefix
-
+    global model_id
     
     s3_bucket = properties.get("s3_bucket")
     s3_prefix = properties.get("s3_prefix")
     mme_prefix = properties.get("mme_prefix")
+    model_id = properties.get("model_id") 
+
+    # download the model during initialization
+    pipeline = DiffusionPipeline.from_pretrained(
+                    model_id,
+                    safety_checker=None
+                )
     
     try:
         subprocess.run(["/opt/djl/bin/s5cmd", "ls", f"s3://{s3_bucket}/{s3_prefix}/"], check=True, timeout=15)
@@ -44,6 +53,7 @@ def handle(inputs: Input):
     global s3_bucket
     global s3_prefix
     global mme_prefix
+    global model_id
 
     if not is_initialized:
         initialize_service(inputs.get_properties())
@@ -54,6 +64,7 @@ def handle(inputs: Input):
     
     tar_buffer = BytesIO(inputs.get_as_bytes())
     train_path, tuning_config = preprocess_images(tar_buffer)
+    tuning_config["base_model"] = model_id
 
     
     class_data_dir = Path("/tmp/priors")
