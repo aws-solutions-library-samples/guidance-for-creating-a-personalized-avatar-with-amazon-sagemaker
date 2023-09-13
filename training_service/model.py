@@ -9,13 +9,34 @@ import tarfile
 import uuid
 import subprocess
 import json
-import boto3
+import time
 
 is_initialized = False
 s3_bucket = None
 s3_prefix = None
 mme_prefix = None
-s3_client = boto3.client('s3')
+
+def initialize_service(properties: dict):
+    
+    global is_initialized
+    global s3_bucket
+    global s3_prefix
+    global mme_prefix
+
+    
+    s3_bucket = properties.get("s3_bucket")
+    s3_prefix = properties.get("s3_prefix")
+    mme_prefix = properties.get("mme_prefix")
+    
+    try:
+        subprocess.run(["/opt/djl/bin/s5cmd", "ls", f"s3://{s3_bucket}/{s3_prefix}/"], check=True, timeout=15)
+    except subprocess.CalledProcessError as e:
+        raise Exception(f"Unable to access s3://{s3_bucket}/{s3_prefix}/. Error message: {e.output}.")
+    except Exception as e:
+        raise Exception(f"Unable to access s3://{s3_bucket}/{s3_prefix}/. Error message: {e}.")
+    
+    is_initialized = True
+
 
 def handle(inputs: Input):
     
@@ -23,13 +44,9 @@ def handle(inputs: Input):
     global s3_bucket
     global s3_prefix
     global mme_prefix
-     
+
     if not is_initialized:
-        properties = inputs.get_properties()
-        s3_bucket = properties.get("s3_bucket")
-        s3_prefix = properties.get("s3_prefix")
-        mme_prefix = properties.get("mme_prefix")
-        is_initialized = True
+        initialize_service(inputs.get_properties())
 
     if inputs.is_empty():
         return None
@@ -63,8 +80,29 @@ def handle(inputs: Input):
     with tarfile.open(output_file_name, mode="w:gz") as tar:
         tar.add(mme_dir, arcname="sd_lora")
     
-    s3_client.upload_file(output_file_name, s3_bucket, f"{mme_prefix}/{os.path.basename(output_file_name)}")
-#     subprocess.run(["/opt/djl/bin/s5cmd", "cp", output_file_name, f"s3://{s3_bucket}/{mme_prefix}/{os.path.basename(output_file_name)}"])
+
+    max_retries = 3
+    timeout = 30  
+
+    for i in range(max_retries):
+        try:
+            result = subprocess.run(["/opt/djl/bin/s5cmd", "cp", output_file_name, f"s3://{s3_bucket}/{mme_prefix}/{os.path.basename(output_file_name)}"], timeout=timeout, check=True)
+            print(f"Model uploaded to s3://{s3_bucket}/{mme_prefix}/{os.path.basename(output_file_name)}")
+            break
+        except subprocess.TimeoutExpired as e:
+            if i < max_retries - 1:  # i is zero indexed
+                time.sleep(2)  # wait for 2 seconds before retrying
+                print(f"Model upload timed out. Retrying...")
+                continue
+            else:
+                raise Exception(f"Model upload timed out after {max_retries} retries.")
+        except subprocess.CalledProcessError as e:
+            print(f"Model upload failed with exit code {e.returncode}. Error message: {e.output}. Retrying...")
+            if i < max_retries - 1:
+                time.sleep(2)
+                continue
+            else:
+                raise Exception(f"Model upload failed after {max_retries} retries.")
         
     # clean up
     shutil.rmtree(train_path.parent, ignore_errors=True)
