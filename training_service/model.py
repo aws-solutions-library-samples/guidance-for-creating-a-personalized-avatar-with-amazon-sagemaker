@@ -15,8 +15,8 @@ from diffusers import DiffusionPipeline
 is_initialized = False
 s3_bucket = None
 s3_prefix = None
-model_id = None
 mme_prefix = None
+model_id = None
 
 def initialize_service(properties: dict):
     
@@ -25,6 +25,7 @@ def initialize_service(properties: dict):
     global s3_prefix
     global mme_prefix
     global model_id
+  
     
     s3_bucket = properties.get("s3_bucket")
     s3_prefix = properties.get("s3_prefix")
@@ -34,6 +35,7 @@ def initialize_service(properties: dict):
     # download the model during initialization
     pipeline = DiffusionPipeline.from_pretrained(
                     model_id,
+                    use_safetensors=True,
                     safety_checker=None
                 )
     
@@ -54,9 +56,11 @@ def handle(inputs: Input):
     global s3_prefix
     global mme_prefix
     global model_id
+   
+    properties = inputs.get_properties()
 
     if not is_initialized:
-        initialize_service(inputs.get_properties())
+        initialize_service(properties)
 
     if inputs.is_empty():
         return None
