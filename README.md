@@ -40,7 +40,7 @@ This notebook is tested on **PyTorch 2.0.0 Python 3.10 GPU Optimized kernel on S
 
 ## Deployment Steps
 
-1. Clone this repo using command ```git clone https://github.com/aws-samples/personalized-avatar-using-genai-on-sagemaker.git```
+1. Clone this repo using command ```git clone https://github.com/aws-solutions-library-samples/guidance-for-personalized-user-experience-created-with-generative-ai-on-aws.git```
 
 After successfully cloning the repo, following files and libraries will be downloaded in the following directory structure:
 
@@ -63,7 +63,7 @@ After successfully cloning the repo, following files and libraries will be downl
         └── config.pbtxt
 ```     
 
-2. cd to the repo folder ```personalized-avatar-using-genai-on-sagemaker```
+2. cd to the repo folder ```guidance-for-personalized-user-experience-created-with-generative-ai-on-aws```
 
 3. Upload a minimum 10 selfie images to the `data` folder. To achieve the best results, it is recommended to provide a variety of image from different angles, with different expressions, and in different backgrounds.
 
