@@ -1,8 +1,8 @@
 numpy
 torch
-accelerate
-transformers
-diffusers
+accelerate==0.22.0
+transformers==4.26
+diffusers==0.20.1
 xformers
-peft
-conda-pack
+peft==0.4.0
+conda-pack==0.7.1
