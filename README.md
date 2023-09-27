@@ -40,7 +40,21 @@ This notebook is tested on **PyTorch 2.0.0 Python 3.10 GPU Optimized kernel on S
 
 ## Deployment Steps
 
-1. Clone this repo using command ```git clone https://github.com/aws-solutions-library-samples/guidance-for-personalized-user-experience-created-with-generative-ai-on-aws.git```
+1. To deploy the soltuion manually, download the [AWS CloudFormation template](cfn_template.txt) to your local hard drive.
+
+2. Sign in to the [AWS CloudFormation console](https://console.aws.amazon.com/cloudformation/home).
+
+3. Select **Create Stack**.
+
+4. On the **Create stack** page, Specify **template section**, select **Upload a template file**.
+
+5. Under **Upload a template file**, select **Choose file** and select the edited template from your local drive.
+
+6. Choose Next and follow the steps in Launch the stack.
+  
+8. This will take a few minutes and setup a [SageMaker Studio Domain](https://docs.aws.amazon.com/sagemaker/latest/dg/sm-domain.html). Follow the instructions [here](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-launch.html) to launch the Studio environment.
+
+9. In SageMaker Studio, clone this Git repository ```https://github.com/aws-solutions-library-samples/guidance-for-personalized-user-experience-created-with-generative-ai-on-aws.git```. More details on how to clone Git repository in SageMaker Studio is [here](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-tasks-git.html).
 
 After successfully cloning the repo, following files and libraries will be downloaded in the following directory structure:
 
