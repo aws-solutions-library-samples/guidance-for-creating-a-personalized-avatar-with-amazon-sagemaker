@@ -11,7 +11,7 @@ The repo is structured into two sections: 1) fine tune and host SD model using n
 
 ### Prerequisites
 
-Make sure you have an AWS account and has permissions to create AWS Resources (SageMaker notebook instance, EC2, and etc).
+Make sure you have an AWS account and permissions to create AWS Resources (SageMaker notebook instance, EC2, and etc).
 
 Then clone the repository using the follow command (code is available in `ec2-inf2` branch):
 
