@@ -1,4 +1,4 @@
-# Guidance For Personalized User Experience Created With Generative AI On AWS
+# Guidance for Creating a Personalized Avatar with Amazon SageMaker
 
 
 ## Table of Content
